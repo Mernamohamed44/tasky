@@ -6,10 +6,11 @@ import 'package:tasky/app/widget/custom_text.dart';
 import 'package:tasky/features/tasks/presentation/screens/task_details_screen.dart';
 
 class QrCodeScanner extends StatelessWidget {
-   QrCodeScanner({super.key});
+  QrCodeScanner({super.key});
 
   final MobileScannerController controller = MobileScannerController();
   bool _hasNavigated = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,21 +20,17 @@ class QrCodeScanner extends StatelessWidget {
           backgroundColor: AppColors.palePrimary,
         ),
         body: MobileScanner(
-          controller: controller,
-          onDetect: (BarcodeCapture capture) {
-            final List<Barcode> barcodes = capture.barcodes;
-            if (barcodes.isNotEmpty) {
-              print(barcodes[0].rawValue);
+            controller: controller,
+            onDetect: (BarcodeCapture capture) {
+              final List<Barcode> barcodes = capture.barcodes;
               if (barcodes.isNotEmpty && !_hasNavigated) {
-                _hasNavigated = true; // Set the flag to true
+                _hasNavigated = true;
                 MagicRouter.navigateReplacement(
                   page: TaskDetailsScreen(
                     taskId: barcodes[0].rawValue!,
                   ),
                 );
               }
-            }
-          },
-        ));
+            }));
   }
 }

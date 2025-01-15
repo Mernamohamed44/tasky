@@ -13,6 +13,7 @@ class ImageManager {
   static const String imageDetails = '$imagesPath/image_details.png';
   static const String logo = '$imagesPath/logo.png';
   static const String splash = '$imagesPath/splash.png';
+  static const String imageError = '$imagesPath/image_error.jpg';
 
   /// svg
   static const String logout = '$svgPath/logout.svg';

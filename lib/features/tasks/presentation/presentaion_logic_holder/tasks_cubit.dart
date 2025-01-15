@@ -64,10 +64,10 @@ class TasksCubit extends Cubit<TasksState> {
   List<TasksEntities> tasks = [];
 
   Color? tasksStatusColor({required String type}) {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'waiting':
         return Color(0xffFFE4F2);
-      case 'inProgress':
+      case 'inprogress':
         return AppColors.palePrimary;
       case 'finished':
         return const Color(0xff0087FF).withOpacity(.4);
@@ -77,10 +77,10 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Color? tasksStatusTextColor({required String type}) {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'waiting':
         return Colors.red;
-      case 'inProgress':
+      case 'inprogress':
         return AppColors.primary;
       case 'finished':
         return const Color(0xff0087FF);
@@ -183,21 +183,24 @@ class TasksCubit extends Cubit<TasksState> {
   GlobalKey<FormState> addTaskFormKey = GlobalKey<FormState>();
 
   Future<void> addTasks( BuildContext context) async {
-    if (addTaskFormKey.currentState!.validate()||validateImage(context)) {
-      emit(AddTasksLoadingState());
-      final response = await baseTasksRepository.addTasks(
-          image: taskImageUploaded,
-          title: titleController.text,
-          desc: descriptionController.text,
-          priority: priorityController.dropDownValue!.name,
-          createdAt: startDateController.text);
+    if(validateImage(context)) {
+      if (addTaskFormKey.currentState!.validate()) {
+        emit(AddTasksLoadingState());
+        final response = await baseTasksRepository.addTasks(
+            image: taskImageUploaded,
+            title: titleController.text,
+            desc: descriptionController.text,
+            priority: priorityController.dropDownValue!.name,
+            createdAt: startDateController.text);
 
-      response.fold(
-            (l) => emit(AddTasksFailedState(message: l.message)),
-            (r) {
-          emit(AddTasksSuccessState());
-        },
-      );
+        response.fold(
+              (l) => emit(AddTasksFailedState(message: l.message)),
+              (r) {
+            emit(AddTasksSuccessState());
+          },
+        );
+      }
+
     }
   }
 

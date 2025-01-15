@@ -6,6 +6,7 @@ import 'package:tasky/app/network/end_points.dart';
 import 'package:tasky/app/utils/colors.dart';
 import 'package:tasky/app/utils/image_manager.dart';
 import 'package:tasky/app/widget/custom_alert.dart';
+import 'package:tasky/app/widget/custom_cached_image.dart';
 import 'package:tasky/app/widget/custom_text.dart';
 import 'package:tasky/features/tasks/domin/entities/tasks_entities.dart';
 import 'package:tasky/features/tasks/presentation/presentaion_logic_holder/tasks_cubit.dart';
@@ -36,9 +37,9 @@ class TabBarItemWidget extends StatelessWidget {
             ClipOval(
               child: SizedBox.fromSize(
                 size: const Size.fromRadius(35),
-                child: Image.network(
-                  '${ApiConstants.baseImagesUrl}${tasks.image}',
+                child: CustomCachedImage(
                   fit: BoxFit.cover,
+                  image: '${ApiConstants.baseImagesUrl}${tasks.image}',
                 ),
               ),
             ),
@@ -124,7 +125,8 @@ class TabBarItemWidget extends StatelessWidget {
                                               if (state
                                                   is DeleteTasksSuccessState) {
                                                 MagicRouter.navigateTo(
-                                                    page: HomeView());
+                                                    page: HomeView(),
+                                                    withHistory: false);
                                               }
                                             },
                                             builder: (context, state) {

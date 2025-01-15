@@ -3,25 +3,27 @@ import 'package:tasky/app/utils/colors.dart';
 import 'package:tasky/app/utils/constance.dart';
 
 class CustomTabBar extends StatelessWidget {
+
   const CustomTabBar({
     super.key,
     required this.tabs,
     required this.isScrollable,
     this.pages,
-    required this.controller,
+    this.controller,
   });
 
   final List<Widget> tabs;
   final List<Widget>? pages;
   final bool isScrollable;
-  final TabController controller;
+  final TabController? controller;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          decoration: const BoxDecoration(),
+          decoration: const BoxDecoration(
+          ),
           child: TabBar(
             controller: controller,
             labelColor: AppColors.white,

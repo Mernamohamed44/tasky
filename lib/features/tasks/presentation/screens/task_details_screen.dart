@@ -8,6 +8,7 @@ import 'package:tasky/app/network/end_points.dart';
 import 'package:tasky/app/utils/colors.dart';
 import 'package:tasky/app/utils/image_manager.dart';
 import 'package:tasky/app/widget/custom_alert.dart';
+import 'package:tasky/app/widget/custom_cached_image.dart';
 import 'package:tasky/app/widget/custom_text.dart';
 import 'package:tasky/features/tasks/presentation/presentaion_logic_holder/tasks_cubit.dart';
 import 'package:tasky/features/tasks/presentation/screens/edit_task_screen.dart';
@@ -62,22 +63,22 @@ class TaskDetailsBody extends StatelessWidget {
           var task = context.read<TasksCubit>().task;
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 32, left: 15, right: 18),
+              padding: const EdgeInsets.only(top: 40, left: 15, right: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       MagicRouter.navigatePop();
                     },
                     child: Row(
                       children: [
-                                  Transform.rotate(
-                    angle: 3.17,
-                    child: Image.asset(
-                      ImageManager.arrowLeft,
-                      color: AppColors.black,
-                    )),
+                        Transform.rotate(
+                            angle: 3.17,
+                            child: Image.asset(
+                              ImageManager.arrowLeft,
+                              color: AppColors.black,
+                            )),
                         10.horizontalSpace,
                         const CustomText(
                           text: 'Task Details',
@@ -125,14 +126,16 @@ class TaskDetailsBody extends StatelessWidget {
                                           value: context.read<TasksCubit>(),
                                           child: CustomAlert(
                                             title: ' delete Task',
-                                            body: 'Do You sure delete this Task?',
-                                            submitWidget: BlocConsumer<TasksCubit,
-                                                TasksState>(
+                                            body:
+                                                'Do You sure delete this Task?',
+                                            submitWidget: BlocConsumer<
+                                                TasksCubit, TasksState>(
                                               listener: (context, state) {
                                                 if (state
                                                     is DeleteTasksSuccessState) {
                                                   MagicRouter.navigateTo(
-                                                      page: const HomeView());
+                                                      page: HomeView(),
+                                                      withHistory: false);
                                                 }
                                               },
                                               builder: (context, state) {
@@ -144,13 +147,15 @@ class TaskDetailsBody extends StatelessWidget {
                                                             id: task!.sId);
                                                   },
                                                   child: Padding(
-                                                    padding: EdgeInsets.symmetric(
-                                                        horizontal: 10.w),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10.w),
                                                     child: const CustomText(
                                                       text: "delete",
                                                       color: AppColors.red,
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                 );
@@ -170,8 +175,11 @@ class TaskDetailsBody extends StatelessWidget {
                   ),
                   10.verticalSpace,
                   Center(
-                      child: Image.network(
-                          '${ApiConstants.baseImagesUrl}${task!.image}')),
+                    child: CustomCachedImage(
+                      fit: BoxFit.cover,
+                      image: '${ApiConstants.baseImagesUrl}${task!.image}',
+                    ),
+                  ),
                   15.verticalSpace,
                   CustomText(
                     text: task.title,

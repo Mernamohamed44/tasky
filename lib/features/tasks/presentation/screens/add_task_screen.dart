@@ -145,6 +145,12 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                           color: AppColors.grey7f),
                       textFieldDecoration: InputDecoration(
                           prefixIcon: Image.asset(ImageManager.flagIcon),
+                        errorStyle: const TextStyle(
+                          color: AppColors.red,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          fontFamily: AppConstance.appFontName,
+                        ),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 15),
                           enabledBorder: OutlineInputBorder(
@@ -192,6 +198,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                       controller: cubit.priorityController,
                       clearOption: true,
                       enableSearch: false,
+
                       clearIconProperty: IconProperty(color: Colors.green),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -200,6 +207,7 @@ class _AddTaskBodyState extends State<AddTaskBody> {
                           return null;
                         }
                       },
+
                       dropDownItemCount: 3,
                       dropDownList: const [
                         DropDownValueModel(name: 'medium', value: "value1"),

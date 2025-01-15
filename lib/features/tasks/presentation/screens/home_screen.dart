@@ -10,10 +10,12 @@ import 'package:tasky/app/widget/custom_alert.dart';
 import 'package:tasky/app/widget/custom_tab_bar.dart';
 import 'package:tasky/app/widget/custom_text.dart';
 import 'package:tasky/app/widget/svg_icons.dart';
+import 'package:tasky/features/auth/presentation/screens/login_view.dart';
 import 'package:tasky/features/auth/presentation/screens/profile_screen.dart';
 import 'package:tasky/features/onboarding/presentation/screen/onboarding_screen_view.dart';
 import 'package:tasky/features/tasks/presentation/presentaion_logic_holder/tasks_cubit.dart';
 import 'package:tasky/features/tasks/presentation/screens/add_task_screen.dart';
+import 'package:tasky/features/tasks/presentation/widgets/tasks_tab_bar.dart';
 
 import '../widgets/qr_scanner.dart';
 import '../widgets/tabbar_body.dart';
@@ -37,20 +39,8 @@ class HomeBody extends StatefulWidget {
   State<HomeBody> createState() => _HomeBodyState();
 }
 
-class _HomeBodyState extends State<HomeBody>
-    with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+class _HomeBodyState extends State<HomeBody> {
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(vsync: this, length: 4);
-    _tabController!.addListener(_handleTabSelection);
-  }
-
-  void _handleTabSelection() {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +85,7 @@ class _HomeBodyState extends State<HomeBody>
                                   onPressed: () {
                                     Caching.clearAllData();
                                     MagicRouter.navigateTo(
-                                        page: const OnBoardingView(),
+                                        page: const LoginView(),
                                         withHistory: false);
                                   },
                                   child: Padding(
@@ -128,99 +118,7 @@ class _HomeBodyState extends State<HomeBody>
               fontWeight: FontWeight.w700,
             ),
             10.verticalSpace,
-            DefaultTabController(
-              length: 4,
-              child: CustomTabBar(
-                tabs: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _tabController!.index = 0;
-                      });
-                      context.read<TasksCubit>().refreshTasks();
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 7),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: _tabController!.index == 0
-                            ? AppColors.primary
-                            : AppColors.palePrimary,
-                      ),
-                      child: const Text('All'),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _tabController!.index = 1;
-                      });
-                      context
-                          .read<TasksCubit>()
-                          .refreshTasks(status: 'inProgress');
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: _tabController!.index == 1
-                            ? AppColors.primary
-                            : AppColors.palePrimary,
-                      ),
-                      child: const Text('In porgress'),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _tabController!.index = 2;
-                      });
-                      context
-                          .read<TasksCubit>()
-                          .refreshTasks(status: 'waiting');
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: _tabController!.index == 2
-                            ? AppColors.primary
-                            : AppColors.palePrimary,
-                      ),
-                      child: const Text('Waiting'),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _tabController!.index = 3;
-                      });
-
-                      context
-                          .read<TasksCubit>()
-                          .refreshTasks(status: 'finished');
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: _tabController!.index == 3
-                            ? AppColors.primary
-                            : AppColors.palePrimary,
-                      ),
-                      child: const Text('Finished'),
-                    ),
-                  ),
-                ],
-                isScrollable: true,
-                controller: _tabController!,
-              ),
-            ),
+            TasksTabBar(),
             Expanded(
               child: TabBarBodyWidget(),
             )

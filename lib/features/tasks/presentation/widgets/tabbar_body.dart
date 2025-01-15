@@ -34,7 +34,7 @@ class TabBarBodyWidget extends StatelessWidget {
           } else if (context.read<TasksCubit>().tasks.isEmpty) {
             return Center(
               child: CustomText(
-                text: 'No Tasks Yest',
+                text: 'No Tasks Yet',
                 color: AppColors.primary,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
