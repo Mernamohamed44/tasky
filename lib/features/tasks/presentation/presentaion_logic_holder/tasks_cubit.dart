@@ -167,22 +167,38 @@ class TasksCubit extends Cubit<TasksState> {
       },
     );
   }
+  bool validateImage(BuildContext context) {
+    if (taskImage == null) {
+      // Show an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please select an image!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+  GlobalKey<FormState> addTaskFormKey = GlobalKey<FormState>();
 
-  Future<void> addTasks() async {
-    emit(AddTasksLoadingState());
-    final response = await baseTasksRepository.addTasks(
-        image: taskImageUploaded,
-        title: titleController.text,
-        desc: descriptionController.text,
-        priority: priorityController.dropDownValue!.name,
-        createdAt: startDateController.text);
+  Future<void> addTasks( BuildContext context) async {
+    if (addTaskFormKey.currentState!.validate()||validateImage(context)) {
+      emit(AddTasksLoadingState());
+      final response = await baseTasksRepository.addTasks(
+          image: taskImageUploaded,
+          title: titleController.text,
+          desc: descriptionController.text,
+          priority: priorityController.dropDownValue!.name,
+          createdAt: startDateController.text);
 
-    response.fold(
-      (l) => emit(AddTasksFailedState(message: l.message)),
-      (r) {
-        emit(AddTasksSuccessState());
-      },
-    );
+      response.fold(
+            (l) => emit(AddTasksFailedState(message: l.message)),
+            (r) {
+          emit(AddTasksSuccessState());
+        },
+      );
+    }
   }
 
 //////////////===edit============

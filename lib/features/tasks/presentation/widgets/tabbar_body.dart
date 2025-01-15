@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tasky/app/utils/colors.dart';
+import 'package:tasky/app/widget/custom_text.dart';
 import 'package:tasky/features/tasks/presentation/presentaion_logic_holder/tasks_cubit.dart';
 
 import 'tabbar_item.dart';
 
 class TabBarBodyWidget extends StatelessWidget {
-  const TabBarBodyWidget({super.key,});
-
+  const TabBarBodyWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,40 +29,43 @@ class TabBarBodyWidget extends StatelessWidget {
       },
       child: BlocBuilder<TasksCubit, TasksState>(
         builder: (context, state) {
-          if (state is GetTasksLoadingState &&
-              context.read<TasksCubit>().tasks.isEmpty) {
-            // Show a loading indicator for the initial fetch
+          if (state is GetTasksLoadingState) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is GetTasksFailedState) {
-            // Show an error message for the initial fetch
+          } else if (context.read<TasksCubit>().tasks.isEmpty) {
             return Center(
-              child: Text(
-                state.message,
-                style: TextStyle(color: Colors.red, fontSize: 16),
+              child: CustomText(
+                text: 'No Tasks Yest',
+                color: AppColors.primary,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          } else if (state is GetTasksFailedState) {
+            return Center(
+              child: CustomText(
+                text: state.message,
+                color: Colors.red,
+                fontSize: 16,
               ),
             );
           } else {
             final tasks = context.read<TasksCubit>().tasks;
 
             return ListView.builder(
-              controller: scrollController, // Attach the scroll controller
-              itemCount: tasks.length +
-                  1, // Add an extra item for the loading indicator
+              controller: scrollController,
+              itemCount: tasks.length + 1,
               itemBuilder: (context, index) {
                 if (index == tasks.length) {
-                  // Show a loading indicator when loading more tasks
                   if (context.read<TasksCubit>().isLoadingMore) {
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
                       child: Center(child: CircularProgressIndicator()),
                     );
                   } else {
-                    return const SizedBox
-                        .shrink(); // Empty widget when not loading more
+                    return const SizedBox.shrink();
                   }
                 }
 
-                // Render the task item
                 return TabBarItemWidget(tasks: tasks[index]);
               },
             );
